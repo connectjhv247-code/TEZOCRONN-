@@ -1,0 +1,191 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile document stored under users/{userId}",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User full name or display name"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of registration"
+        },
+        "role": {
+          "type": "string",
+          "description": "User organizational role"
+        }
+      },
+      "required": ["uid", "email", "displayName", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Social chat feed post created by authenticated users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorEmail": { "type": "string" },
+        "content": { "type": "string" },
+        "likes": { "type": "array", "items": { "type": "string" } },
+        "relatesCount": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "attachmentType": { "type": "string" },
+        "attachmentUrl": { "type": "string" },
+        "attachmentName": { "type": "string" },
+        "attachmentSize": { "type": "string" }
+      },
+      "required": ["userId", "authorName", "createdAt"]
+    },
+    "RelateItem": {
+      "title": "RelateItem",
+      "description": "Relate community reflection or perspective shared by authenticated users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorEmail": { "type": "string" },
+        "thought": { "type": "string" },
+        "category": { "type": "string" },
+        "supportCount": { "type": "number" },
+        "supporters": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "authorName", "thought", "category", "createdAt"]
+    },
+    "DirectMessage": {
+      "title": "DirectMessage",
+      "description": "Direct message exchanged between authenticated users",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "recipientEmail": { "type": "string" },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["senderId", "senderName", "recipientId", "text", "createdAt"]
+    },
+    "Relationship": {
+      "title": "Relationship",
+      "description": "Relate connection between two authenticated users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "targetUserId": { "type": "string" },
+        "targetUserName": { "type": "string" },
+        "targetUserEmail": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "targetUserId", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real application event alert for a specific authenticated user",
+      "type": "object",
+      "properties": {
+        "recipientUid": { "type": "string" },
+        "senderUid": { "type": "string" },
+        "senderName": { "type": "string" },
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "read": { "type": "boolean" },
+        "targetUid": { "type": "string" }
+      },
+      "required": ["recipientUid", "senderUid", "type", "title", "body", "createdAt", "read"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "User project folder",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["ownerId", "name", "createdAt"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "User task item",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string" },
+        "priority": { "type": "string" },
+        "category": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "status", "priority", "createdAt"]
+    },
+    "Block": {
+      "title": "Block",
+      "description": "User blocking relationship restricting interaction between users",
+      "type": "object",
+      "properties": {
+        "blockerId": { "type": "string" },
+        "blockedId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["blockerId", "blockedId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Private user account profiles indexed by Firebase Auth UID"
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Social chat timeline posts readable by authenticated users"
+    },
+    "/relates/{relateId}": {
+      "schema": "RelateItem",
+      "description": "Relate experiences and perspectives readable by authenticated users"
+    },
+    "/dms/{dmId}": {
+      "schema": "DirectMessage",
+      "description": "Private direct messages between sender and recipient"
+    },
+    "/relationships/{relId}": {
+      "schema": "Relationship",
+      "description": "User connection record establishing mutual or followed relate links"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Private user notification alerts generated by real application events"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "User workspace project records"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User personal task management items"
+    },
+    "/blocks/{blockId}": {
+      "schema": "Block",
+      "description": "User blocking relationships restricting messaging and connections"
+    }
+  }
+}

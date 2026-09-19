@@ -1,0 +1,6 @@
+{
+  "name": "TEZOCRON",
+  "description": "TEZOCRON by JMP (Jaz media parustarta) - Real-time productivity and task management platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

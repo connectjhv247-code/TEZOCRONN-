@@ -1,0 +1,24 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Community Social Chat uploads: images & documents
+    match /social_chat/{userId}/{allPaths=**} {
+      // Any authenticated user can view/download shared social chat media
+      allow read: if isAuthenticated();
+      // Authenticated users can upload to their own user folder under 10MB
+      allow write: if isAuthenticated() 
+                   && request.auth.uid == userId 
+                   && request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Default fallback
+    match /{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}
